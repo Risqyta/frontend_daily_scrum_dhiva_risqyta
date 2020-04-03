@@ -11,7 +11,7 @@
                 </div>
                 <h4>Selamat datang!</h4>
                 <h6 class="font-weight-light">Login untuk mengakses aplikasi daily scrum.</h6>
-                <form v-on:submit.prevent="Login" class="pt-3" method="post">
+                <form v-on:submit.prevent="Login">
                 <!-- <form class="pt-3" method="post" action="#"> -->
                 <div class="form-group">
                   <div class="input-group">

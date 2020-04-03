@@ -11,7 +11,8 @@
                 </div>
                 <h4>Selamat datang!</h4>
                 <h6 class="font-weight-light">Daftar untuk menggunakan aplikasi daily scrum.</h6>
-                <form class="pt-3" method="post" action="#">
+                 <form v-on:submit.prevent="Register">
+                <!--<form class="pt-3" method="post" action="#">-->
                   <div class="form-group">
                     <div class="input-group">
                       <div class="input-group-prepend bg-transparent">
@@ -19,7 +20,7 @@
                           <i class="mdi mdi-account-outline text-primary"></i>
                         </span>
                       </div>
-                      <input type="text" class="form-control form-control-lg border-left-0" id="firstname" name="firstname" placeholder="First Name" required>
+                      <input v-model="firstname" type="text" class="form-control form-control-lg border-left-0" id="firstname" name="firstname" placeholder="First Name" required>
                     </div>
                   </div>
                   <div class="form-group">
@@ -29,7 +30,7 @@
                           <i class="mdi mdi-account-outline text-primary"></i>
                         </span>
                       </div>
-                      <input type="text" class="form-control form-control-lg border-left-0" id="lastname" name="lastname" placeholder="Last Name" required>
+                      <input v-model="lastname" type="text" class="form-control form-control-lg border-left-0" id="lastname" name="lastname" placeholder="Last Name" required>
                     </div>
                   </div>
                   <div class="form-group">
@@ -39,7 +40,7 @@
                           <i class="mdi mdi-message-outline text-primary"></i>
                         </span>
                       </div>
-                      <input type="email" class="form-control form-control-lg border-left-0" id="email" name="email" placeholder="E-Mail" required>
+                      <input v-model="email" type="email" class="form-control form-control-lg border-left-0" id="email" name="email" placeholder="E-Mail" required>
                     </div>
                   </div>
                   <div class="form-group">
@@ -49,7 +50,7 @@
                           <i class="mdi mdi-lock-outline text-primary"></i>
                         </span>
                       </div>
-                      <input type="password" class="form-control form-control-lg border-left-0" name="password" id="password" placeholder="New Password" required>                        
+                        <input v-model="password" type="password" class="form-control form-control-lg border-left-0" name="password" id="password" placeholder="Kata Sandi" required>                           
                     </div>
                   </div>
                   <div class="form-group">
@@ -59,7 +60,7 @@
                           <i class="mdi mdi-lock-outline text-primary"></i>
                         </span>
                       </div>
-                      <input type="password" class="form-control form-control-lg border-left-0" name="password_verify" id="password_verify" placeholder="Retype Your New Password" required>                        
+                      <input v-model = password_confirmation type="password" class="form-control form-control-lg border-left-0" name="password_confirmation" id="password_confirmation" placeholder="Retype Your New Password" required>                        
                     </div>
                   </div>
                   <div class="my-3">
@@ -77,43 +78,27 @@
   </div>
 </template>
 <script>
-module.exports = {
+export default {
+    data() {
+        return {
+            firstname             : '',
+            lastname              : '',
+            email                 : '',
+            password              : '',
+            password_confirmation : '',
+        };
+    },
     methods: {
-        Add : function(){
-            this.action             = "insert";
-            this.firstname          = "";
-            this.lastname           = "";
-            this.email              = "";
-            this.password           = "";
-            this.password_verify    = "";
-        },
-        Save : function(){
-            let conf = { headers: { "Authorization" : 'Bearer ' + this.key } };
-            this.$bvToast.show("loadingToast");
-            if(this.action === "insert"){
-                let form = new FormData();
-                form.append("id", this.id);
-                form.append("firstname", this.firstname);
-                form.append("lastname", this.lastname);
-                form.append("email", this.email);
-                form.append("password", this.password);
-                form.append("password_verify", this.password_verify);
-                this.axios.post("/user", form, conf)
-                .then(response => {
-                    this.$bvToast.hide("loadingToast");
-                    if(this.search == ""){
-                        this.getData();
-                    } else {
-                        this.searching();
-                    }
-                    this.message = response.data.message;
-                    this.$bvToast.show("message");
-                })
-                .catch(error => {
-                    console.log(error);
-                });
-            }
+        Register: function() {
+            let firstname       = this.firstname;
+            let lastname       = this.lastname;
+            let email       = this.email;
+            let password    = this.password;
+            let password_confirmation       = this.password_confirmation;
+            this.$store.dispatch("register", { firstname, lastname, email, password, password_confirmation })
+            .then(() => this.$router.push("/login"))
+            .catch(err => console.log(err));
         }
     }
-}
-</script>z
+};
+</script>
