@@ -76,3 +76,44 @@
     <!-- page-body-wrapper ends -->
   </div>
 </template>
+<script>
+module.exports = {
+    methods: {
+        Add : function(){
+            this.action             = "insert";
+            this.firstname          = "";
+            this.lastname           = "";
+            this.email              = "";
+            this.password           = "";
+            this.password_verify    = "";
+        },
+        Save : function(){
+            let conf = { headers: { "Authorization" : 'Bearer ' + this.key } };
+            this.$bvToast.show("loadingToast");
+            if(this.action === "insert"){
+                let form = new FormData();
+                form.append("id", this.id);
+                form.append("firstname", this.firstname);
+                form.append("lastname", this.lastname);
+                form.append("email", this.email);
+                form.append("password", this.password);
+                form.append("password_verify", this.password_verify);
+                this.axios.post("/user", form, conf)
+                .then(response => {
+                    this.$bvToast.hide("loadingToast");
+                    if(this.search == ""){
+                        this.getData();
+                    } else {
+                        this.searching();
+                    }
+                    this.message = response.data.message;
+                    this.$bvToast.show("message");
+                })
+                .catch(error => {
+                    console.log(error);
+                });
+            }
+        }
+    }
+}
+</script>z
